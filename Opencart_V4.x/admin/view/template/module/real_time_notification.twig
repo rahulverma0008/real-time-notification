@@ -1,0 +1,84 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <a href="{{ support_email }}" data-bs-toggle="tooltip" title="{{ text_need_support }}" class="btn btn-info"><i class="fa-solid fa-life-ring"></i></a>
+        <button type="submit" form="form-real-time-notification" data-bs-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa-solid fa-save"></i></button>
+        <a href="{{ back }}" data-bs-toggle="tooltip" title="{{ button_back }}" class="btn btn-light"><i class="fa-solid fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-pencil"></i> {{ text_edit }}</div>
+      <div class="card-body">
+        <form id="form-real-time-notification" action="{{ save }}" method="post" data-oc-toggle="ajax">
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_position }}</label>
+            <div class="col-sm-10">
+              {% for position in positions %}
+                <div class="form-check form-check-inline">
+                  <input type="radio" name="module_real_time_notification_position" value="{{ position }}" id="input-position-{{ position }}" class="form-check-input"{% if module_real_time_notification_position == position %} checked{% endif %}/>
+                  <label for="input-position-{{ position }}" class="form-check-label">{{ attribute(_context, 'text_' ~ position|replace({'-': '_'})) }}</label>
+                </div>
+              {% endfor %}
+              <div id="error-position" class="invalid-feedback"></div>
+              <div class="form-text">{{ help_position }}</div>
+            </div>
+          </div>
+          {% for key, label in {'allow_dismiss': entry_allow_dismiss, 'pause_on_hover': entry_pause_on_hover, 'newest_on_top': entry_newest_on_top, 'progress_bar': entry_progress_bar} %}
+            <div class="row mb-3">
+              <label class="col-sm-2 col-form-label">{{ label }}</label>
+              <div class="col-sm-10">
+                <div class="form-check form-switch form-switch-lg">
+                  <input type="hidden" name="module_real_time_notification_{{ key }}" value="0"/>
+                  <input type="checkbox" name="module_real_time_notification_{{ key }}" value="1" id="input-{{ key|replace({'_': '-'}) }}" class="form-check-input"{% if attribute(_context, 'module_real_time_notification_' ~ key) %} checked{% endif %}/>
+                </div>
+                <div class="form-text">{{ attribute(_context, 'help_' ~ key) }}</div>
+              </div>
+            </div>
+          {% endfor %}
+          <div class="row mb-3">
+            <label for="input-delay" class="col-sm-2 col-form-label">{{ entry_delay }}</label>
+            <div class="col-sm-10">
+              <input type="text" name="module_real_time_notification_delay" value="{{ module_real_time_notification_delay }}" id="input-delay" class="form-control"/>
+              <div id="error-delay" class="invalid-feedback"></div>
+              <div class="form-text">{{ help_delay }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_order_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-control p-2" style="height: 150px; overflow: auto;">
+                {% for order_status in order_statuses %}
+                  <div class="form-check">
+                    <input type="checkbox" name="module_real_time_notification_order_status[]" value="{{ order_status.order_status_id }}" id="input-order-status-{{ order_status.order_status_id }}" class="form-check-input"{% if order_status.order_status_id in module_real_time_notification_order_status %} checked{% endif %}/>
+                    <label for="input-order-status-{{ order_status.order_status_id }}" class="form-check-label">{{ order_status.name }}</label>
+                  </div>
+                {% endfor %}
+              </div>
+              <div class="form-text">{{ help_order_status }}</div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">{{ entry_status }}</label>
+            <div class="col-sm-10">
+              <div class="form-check form-switch form-switch-lg">
+                <input type="hidden" name="module_real_time_notification_status" value="0"/>
+                <input type="checkbox" name="module_real_time_notification_status" value="1" id="input-status" class="form-check-input"{% if module_real_time_notification_status %} checked{% endif %}/>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,2 @@
+CODE=real_time_notification
+TYPE=module
